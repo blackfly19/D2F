@@ -4,16 +4,16 @@ from flask_codesprint.models import User
 from flask_codesprint import bcrypt
 from flask_login import login_user
 
-@app.route('/',methods = ['GET','POST'])
+@app.route('/')
+def home():
+  return 'Welcome! <a href="/login">login here</a>'
+
+@app.route('/login',methods = ['GET','POST'])
 def login():
     if request.method == 'POST':
-        print(request.form['username'])
         user = User.query.filter_by(username=request.form['username']).first()
         if user and bcrypt.check_password_hash(user.password,request.form['password']):
-            print('i am in')
-            redirect('main.html')
+            return "Hello bro.You have been logged in"
         else:
-            print('not possible')
             flash('Login unsuccessfull. Please check username and password.','danger')
-
     return render_template('login.html')
